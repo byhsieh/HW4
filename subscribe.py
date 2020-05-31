@@ -44,15 +44,15 @@ def on_message(mosq, obj, msg):
     l2, = ax[0].plot(t, y_value, 'r')
     l3, = ax[0].plot(t, z_value, 'g')
 
-    ax[0].legend([l1, l2, l3], ['x-acc', 'y-acc', 'z-acc'], loc = 'lower left')
+    ax[0].legend([l1, l2, l3], ['x-acc', 'y-acc', 'z-acc'], loc = 'lower right')
 
-    ax[0].set_xlabel('Time')
+    ax[0].set_xlabel('Timestamp')
     ax[0].set_ylabel('Acc Value')
 
     ax[1].stem(t, log_value, use_line_collection = True)
     plt.ylim(-0.1, 1.1) # set the y-limit from 0 to 1
     # ax[1].plot(frq,abs(Y),'r') # plotting the spectrum
-    ax[1].set_xlabel('Time')
+    ax[1].set_xlabel('Timestamp')
     ax[1].set_ylabel('Tilt')
     plt.show()
 
