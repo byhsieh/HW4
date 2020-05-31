@@ -3,9 +3,6 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-serdev0 = '/dev/ttyACM0'
-s0 = serial.Serial(serdev0,9600)
-
 # XBee setting
 serdev = '/dev/ttyUSB0'
 s = serial.Serial(serdev,9600,timeout=3)
@@ -57,11 +54,6 @@ num=np.arange(0,20,1)
 xbeenum=[]
 count=0
 
-ACC_X = []
-ACC_Y = []
-ACC_Z = []
-
-
 while True:
     s.write("/query/run\r".encode())
     line=s.read(2)
@@ -78,32 +70,12 @@ for i in range(0,19):
     print(num[i])
 num[19]=2
 
-for i in range(0,20):
+fig, ax = plt.subplots(111)
 
-    line=s0.readline() # Read an echo string from K66F terminated with '\n'
-
-    num = list(map(float,line.split()))
-
-    # print (num)
-
-    ACC_X.append(num[0])
-    ACC_Y.append(num[1])
-    ACC_Z.append(num[2])
-
-fig, ax = plt.subplots(2, 1)
-
-ax[0].plot(t,num)
-ax[0].set_xlabel('timestamp')
-ax[0].set_ylabel('number')
-ax[0].set_title('# collected data plot')
-
-ax[1].plot(t, ACC_X, color="blue",  label="x-acc")
-ax[1].plot(t, ACC_Y, color="red",   label="y-acc")
-ax[1].plot(t, ACC_Z, color="green", label="z-acc")
-ax[1].legend(loc='lower right')
-ax[1].set_xlabel('timestamp')
-ax[1].set_ylabel('acc value')
-ax[1].set_title('Acceleration Plot')
+ax.plot(t,num)
+ax.set_xlabel('timestamp')
+ax.set_ylabel('number')
+ax.set_title('# collected data plot')
 
 plt.show()
 
