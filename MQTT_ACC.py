@@ -2,6 +2,7 @@ import paho.mqtt.client as paho
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 # https://os.mbed.com/teams/mqtt/wiki/Using-MQTT#python-client
 
 # MQTT broker hosted on local machine
@@ -63,11 +64,26 @@ mqttc.subscribe(topic, 0)
 mqttc.loop_forever()
 
 tilt=[]
+
 for i in range(0,int(samplecount)):
-    if (Z[i] <= 0.5) :
+      
+    X_angle = math.atan(X[i] / (math.sqrt(Y[i]**2 + Z[i]**2)))
+    Y_angle = math.atan(Y[i] / (math.sqrt(X[i]**2 + Z[i]**2)))
+    Z_angle = math.atan((math.sqrt(X[i]**2 + Y[i]**2)) / Z[i])
+
+    Pitch = X_angle * 180 / math.pi
+    Roll = Y_angle * 180 / math.pi
+    Yaw = Z_angle * 180 / math.pi
+      
+    if ( Pitch >= 45.0 or Roll >= 45.0 or Yaw >= 45.0 ) :
         tilt.append(1)
     else :
         tilt.append(0)
+            
+    #if (Z[i] <= 0.5) :
+    #    tilt.append(1)
+    #else :
+    #    tilt.append(0)
         
 fig, ax = plt.subplots(2, 1)
 ax[0].plot(t,X,color="blue", linewidth=1.0, linestyle="-",label="x-acc")
