@@ -137,26 +137,26 @@ print("Connecting to " + host + "/" + topic)
 mqttc.connect(host, port=1883, keepalive=60)
 mqttc.subscribe(topic, 0)
 
-mesg = "s"+numcount
+mesg = "Num "+numcount
 mqttc.publish(topic, mesg)
 
 for i in range(0,int(numcount)):
-    mesg = "x"+str(x[i])
+    mesg = "Xacc "+str(x[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "y"+str(y[i])
+    mesg = "Yacc "+str(y[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "z"+str(z[i])
+    mesg = "Zacc"+str(z[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "t"+str(sampletime[i])
+    mesg = "Time "+str(sampletime[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
