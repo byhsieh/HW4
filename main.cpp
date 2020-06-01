@@ -63,18 +63,16 @@ Thread t;
 Thread t2(osPriorityNormal, 100 * 1024);
 Timer timer1;
 Timer timer2;
-//Thread mqtt_thread(osPriorityHigh);
+
 EventQueue mqtt_queue;
 float ts=0.5;
-//float prev_angle;
+
 int times=0;
 int counttime=0;
-//int isasked=0;
-//int flag=0;
+int flag=0;
 EventQueue queue2(32 * EVENTS_EVENT_SIZE);
 int timearr[20];
-//int init_flag=0;
-//float init_angle=0;
+
 void xbee_rx_interrupt(void);
 void xbee_rx(void);
 void check_addr(char *xbee_reply, char *messenger);
@@ -134,7 +132,6 @@ int main(){
     ts=0.5;
     timer1.start();
     queue2.call(Acc);
-    //queue.call(xbee_rx);
     xbee.attach(xbee_rx_interrupt, Serial::RxIrq);
 
     return 0;
@@ -160,10 +157,10 @@ void xbee_rx(void){
                 break;
             }
             buf[i] = pc.putc(recv);
-            //buf[i] = recv;
+            
         }
         start_sample=1;
-        //pc.printf("%s",buf);
+        
         if(!flag){
             timer2.start();
             timer2.reset();
@@ -172,8 +169,6 @@ void xbee_rx(void){
         
         RPC::call(buf, outbuf);
 
-        //pc.printf("%s\r\n", outbuf);
-       // wait(0.1);
     }
  
     xbee.attach(xbee_rx_interrupt, Serial::RxIrq); // reattach interrupt
@@ -209,26 +204,26 @@ void Acc_Val(Arguments *in,Reply *out){
     int a=sprintf(tmp,"%03d",samplecount);
     xbee.printf("%s",tmp);
     pc.printf("%d",samplecount);
-    //xbee.printf("")
+
     for(int i=0;i<samplecount;i++){
         
         char outbuf[6];
         int b=sprintf(outbuf,"%+1.3f",x[i]);
-        //pc.printf("%s\r\n",outbuf);
+        
         xbee.printf("%s",outbuf);
         wait(0.2);        
     }
     for(int i=0;i<samplecount;i++){
         char outbuf[6];
         int b=sprintf(outbuf,"%+1.3f",y[i]);
-        //pc.printf("%s\r\n",outbuf);
+        
         xbee.printf("%s",outbuf);
         wait(0.2);        
     }
     for(int i=0;i<samplecount;i++){
         char outbuf[6];
         int b=sprintf(outbuf,"%+1.3f",z[i]);
-        //pc.printf("%s\r\n",outbuf);
+        
         xbee.printf("%s",outbuf);
         wait(0.2);        
     }
@@ -252,7 +247,6 @@ void Acc() {
         int16_t acc16;
         float t[3];
         uint8_t res[6];
-        //float angle=90;
         
         FXOS8700CQ_readRegs(FXOS8700Q_OUT_X_MSB, res, 6);
 
@@ -271,12 +265,6 @@ void Acc() {
             acc16 -= UINT14_MAX;
         t[2] = ((float)acc16) / 4096.0f;
 
-        /*if(!init_flag){
-            init_angle=atan(t[2]/sqrt(t[0]*t[0]+t[1]*t[1]));
-            prev_angle=init_angle;
-            init_flag=1;
-        }
-        angle = atan(t[2]/sqrt(t[0]*t[0]+t[1]*t[1]));*/
 
         float xangle = atan(t[0] / (sqrt(pow(t[1],2) + pow(t[2],2))));
         float yangle = atan(t[1] / (sqrt(pow(t[0],2) + pow(t[2],2))));
@@ -286,7 +274,6 @@ void Acc() {
         float Roll = yangle * 180 / PI;
         float Yaw = zangle * 180 / PI;
 
-        //if((init_angle-angle)*180/3.14159265358>45 && (init_angle-prev_angle)*180/3.14159265358<45)
         if ( Pitch > 45.0 || Roll > 45.0 || Yaw > 45.0 ){
 
             ts=0.1;
@@ -295,16 +282,6 @@ void Acc() {
 
         if(timer1.read_ms()>1000)
             ts=0.5;
-
-        //prev_angle=angle;
-        /*pc.printf("FXOS8700Q ACC: X=%1.4f(%x%x) Y=%1.4f(%x%x) Z=%1.4f(%x%x)",\
-                t[0], res[0], res[1],\
-                t[1], res[2], res[3],\
-                t[2], res[4], res[5]\
-        );*/
-        /*if(isasked)
-            times=0;
-        else*/
 
         if(start_sample){
             x[samplecount]=t[0];

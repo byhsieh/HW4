@@ -27,21 +27,21 @@ def on_message(mosq, obj, msg):
     global samplecount,X,Y,Z,t
     a=str(msg.payload,encoding = "utf-8")
     result= float(a[1:])
-    if 'End' in a:
+    if 'E' in a:
         print("End")
         mqttc.disconnect()
-    elif 'Num' in a:
+    elif 'S' in a:
         samplecount=result
-    elif 'Xacc' in a:
+    elif 'X' in a:
         X.append(result)
-    elif 'Yacc' in a:
+    elif 'Y' in a:
         Y.append(result)
-    elif 'Zacc' in a:
+    elif 'Z' in a:
         Z.append(result)
-    elif 'Time' in a:
+    elif 'T' in a:
         t.append(result)
 
-    print(result)
+    #print(result)
     
   
 def on_subscribe(mosq, obj, mid, granted_qos):
@@ -80,12 +80,7 @@ for i in range(0,int(samplecount)):
         tilt.append(1)
     else :
         tilt.append(0)
-            
-    #if (Z[i] <= 0.5) :
-    #    tilt.append(1)
-    #else :
-    #    tilt.append(0)
-        
+                   
 fig, ax = plt.subplots(2, 1)
 ax[0].plot(t,X,color="blue", linewidth=1.0, linestyle="-",label="x-acc")
 ax[0].plot(t,Y,color="red", linewidth=1.0, linestyle="-",label="y-acc")
@@ -96,6 +91,5 @@ ax[0].set_ylabel('Acc Vector')
 
 ax[1].stem(t,tilt) 
 ax[1].set_xlabel('Time')
-ax[1].set_ylabel('Tiilt')
+ax[1].set_ylabel('Tilt')
 plt.show()
-

@@ -65,7 +65,7 @@ sampletime=[]
 while True:
     s.write("/Data_Times/run\r".encode())
     line=s.read(2)
-    print("read:")
+    print("read times:")
     print(line.decode())
     xbeenum.append(line)
     count=count+1
@@ -91,7 +91,7 @@ for i in range(0,int(numcount)):
     z.append(float(line.decode()))
 for i in range(0,int(numcount)):
     line=s.read(6)
-    #print(line.decode())
+    print(line.decode())
     sampletime.append(float(line.decode()))
 
 for i in range(0,19):
@@ -137,29 +137,29 @@ print("Connecting to " + host + "/" + topic)
 mqttc.connect(host, port=1883, keepalive=60)
 mqttc.subscribe(topic, 0)
 
-mesg = "Num "+numcount
+mesg = "S"+numcount
 mqttc.publish(topic, mesg)
 
 for i in range(0,int(numcount)):
-    mesg = "Xacc "+str(x[i])
+    mesg = "X"+str(x[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "Yacc "+str(y[i])
+    mesg = "Y"+str(y[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "Zacc "+str(z[i])
+    mesg = "Z"+str(z[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "Time "+str(sampletime[i])
+    mesg = "T"+str(sampletime[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
-mesg = "End26.12"
+mesg = "E27.14"
 mqttc.publish(topic, mesg)
 s.close()
