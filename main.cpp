@@ -49,10 +49,10 @@ void FXOS8700CQ_writeRegs(uint8_t * data, int len);
 void reply_messange(char *xbee_reply, char *messange);
 void Acc();
 void getAddr(Arguments *in, Reply *out);
-void Collected_Data_Times(Arguments *in,Reply *out);
+void Data_Times(Arguments *in,Reply *out);
 void Acc_Val(Arguments *in,Reply *out);
 RPCFunction rpcAccVal(&Acc_Val,"Acc_Val");
-RPCFunction rpcCollectedDataTimes(&Collected_Data_Times, "Collected_Data_Times");
+RPCFunction rpcDataTimes(&Data_Times, "Data_Times");
 
 
 RawSerial pc(USBTX, USBRX);
@@ -60,21 +60,21 @@ RawSerial xbee(D12, D11);
 
 EventQueue queue(32 * EVENTS_EVENT_SIZE);
 Thread t;
-Thread t2(osPriorityNormal, 100 * 1024 /*120K stack size*/);;
+Thread t2(osPriorityNormal, 100 * 1024);
 Timer timer1;
 Timer timer2;
 //Thread mqtt_thread(osPriorityHigh);
 EventQueue mqtt_queue;
 float ts=0.5;
-float prev_angle;
+//float prev_angle;
 int times=0;
 int counttime=0;
-int isasked=0;
-int flag=0;
+//int isasked=0;
+//int flag=0;
 EventQueue queue2(32 * EVENTS_EVENT_SIZE);
 int timearr[20];
-int init_flag=0;
-float init_angle=0;
+//int init_flag=0;
+//float init_angle=0;
 void xbee_rx_interrupt(void);
 void xbee_rx(void);
 void check_addr(char *xbee_reply, char *messenger);
@@ -204,7 +204,7 @@ void check_addr(char *xbee_reply, char *messenger){
 }
 
 void Acc_Val(Arguments *in,Reply *out){
-    pc.printf("inee");
+    pc.printf("xbee");
     char tmp[3];
     int a=sprintf(tmp,"%03d",samplecount);
     xbee.printf("%s",tmp);
@@ -349,13 +349,12 @@ void FXOS8700CQ_writeRegs(uint8_t * data, int len) {
    i2c.write(m_addr, (char *)data, len);
 }
 
-void Collected_Data_Times(Arguments *in,Reply *out){
+void Data_Times(Arguments *in,Reply *out){
 
     pc.printf("%d\r\n",times);   
-
-    char ss[3];
-    sprintf(ss,"%02d",times);
-    xbee.printf("%s",ss);   
+    char buf[3];
+    sprintf(buf,"%02d",times);
+    xbee.printf("%s",buf);   
     times=0;
     counttime++;
 }   
