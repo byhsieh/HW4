@@ -151,7 +151,7 @@ for i in range(0,int(numcount)):
     print(mesg)
     time.sleep(0.1)
 for i in range(0,int(numcount)):
-    mesg = "Zacc"+str(z[i])
+    mesg = "Zacc "+str(z[i])
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
@@ -160,6 +160,6 @@ for i in range(0,int(numcount)):
     mqttc.publish(topic, mesg)
     print(mesg)
     time.sleep(0.1)
-mesg = "g26.12"
+mesg = "End26.12"
 mqttc.publish(topic, mesg)
 s.close()
