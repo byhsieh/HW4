@@ -27,18 +27,18 @@ def on_message(mosq, obj, msg):
     global samplecount,X,Y,Z,t
     a=str(msg.payload,encoding = "utf-8")
     result= float(a[1:])
-    if 'End ' in a:
+    if 'End' in a:
         print("End")
         mqttc.disconnect()
-    elif 'Num ' in a:
+    elif 'Num' in a:
         samplecount=result
-    elif 'Xacc ' in a:
+    elif 'Xacc' in a:
         X.append(result)
-    elif 'Yacc ' in a:
+    elif 'Yacc' in a:
         Y.append(result)
-    elif 'Zacc ' in a:
+    elif 'Zacc' in a:
         Z.append(result)
-    elif 'Time ' in a:
+    elif 'Time' in a:
         t.append(result)
 
     print(result)
