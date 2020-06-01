@@ -17,6 +17,7 @@ X = []
 Y = []
 Z = []
 samplecount=0
+
 # Callbacks
 def on_connect(self, mosq, obj, rc):
       print("Connected rc: " + str(rc))
@@ -26,18 +27,18 @@ def on_message(mosq, obj, msg):
     global samplecount,X,Y,Z,t
     a=str(msg.payload,encoding = "utf-8")
     result= float(a[1:])
-    if 'g' in a:
-        print("g")
+    if 'End ' in a:
+        print("End")
         mqttc.disconnect()
-    elif 's' in a:
+    elif 'Num ' in a:
         samplecount=result
-    elif 'x' in a:
+    elif 'Xacc ' in a:
         X.append(result)
-    elif 'y' in a:
+    elif 'Yacc ' in a:
         Y.append(result)
-    elif 'z' in a:
+    elif 'Zacc ' in a:
         Z.append(result)
-    elif 't' in a:
+    elif 'Time ' in a:
         t.append(result)
 
     print(result)
