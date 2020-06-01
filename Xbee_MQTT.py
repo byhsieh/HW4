@@ -9,7 +9,7 @@ mqttc = paho.Client()
 
 # XBee setting
 serdev = '/dev/ttyUSB0'
-s = serial.Serial(serdev, 9600,timeout=5)
+s = serial.Serial(serdev,9600,timeout=5)
 
 s.write("+++".encode())
 char = s.read(2)
@@ -61,8 +61,9 @@ x=[]
 y=[]
 z=[]
 sampletime=[]
+
 while True:
-    s.write("/Collected_Data_Times/run\r".encode())
+    s.write("/Data_Times/run\r".encode())
     line=s.read(2)
     print("read:")
     print(line.decode())
@@ -71,28 +72,29 @@ while True:
     time.sleep(1)
     if count==21 :
         break
+        
 s.write("/Acc_Val/run\r".encode())
 numcount=s.read(3).decode()
 print(numcount)
 
 for i in range(0,int(numcount)):
     line=s.read(6)
-    print(line.decode())
+    #print(line.decode())
     x.append(float(line.decode()))
 for i in range(0,int(numcount)):
     line=s.read(6)
-    print(line.decode())
+    #print(line.decode())
     y.append(float(line.decode()))
 for i in range(0,int(numcount)):
     line=s.read(6)
-    print(line.decode())
+    #print(line.decode())
     z.append(float(line.decode()))
 for i in range(0,int(numcount)):
     line=s.read(6)
-    print(line.decode())
+    #print(line.decode())
     sampletime.append(float(line.decode()))
 
-for i  in range(0,19):
+for i in range(0,19):
     num[i]=xbeenum[i+1]
     #print(num[i])
 
@@ -103,7 +105,7 @@ plt.plot(t,num)
 plt.xlim((0,20))
 plt.xlabel('timestamp')
 plt.ylabel('number')
-plt.title('# collected data plot')
+plt.title('# of collected data plot')
 plt.show()
 
 # Settings for connection
