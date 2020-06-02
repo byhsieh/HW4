@@ -32,10 +32,10 @@
 
 I2C i2c( PTD9,PTD8);
 int m_addr = FXOS8700CQ_SLAVE_ADDR1;
+
 volatile int message_num = 0;
 volatile int arrivedcount = 0;
 volatile bool closed = false;
-
 
 float x[500];
 float y[500];
@@ -43,7 +43,9 @@ float z[500];
 float sampletime[500];
 int start_sample=0;
 int samplecount=0;
+
 const char* topic = "mbed";
+
 void FXOS8700CQ_readRegs(int addr, uint8_t * data, int len);
 void FXOS8700CQ_writeRegs(uint8_t * data, int len);
 void reply_messange(char *xbee_reply, char *messange);
@@ -51,26 +53,27 @@ void Acc();
 void getAddr(Arguments *in, Reply *out);
 void Data_Times(Arguments *in,Reply *out);
 void Acc_Val(Arguments *in,Reply *out);
+
 RPCFunction rpcAccVal(&Acc_Val,"Acc_Val");
 RPCFunction rpcDataTimes(&Data_Times, "Data_Times");
-
 
 RawSerial pc(USBTX, USBRX);
 RawSerial xbee(D12, D11);
 
 EventQueue queue(32 * EVENTS_EVENT_SIZE);
+EventQueue queue2(32 * EVENTS_EVENT_SIZE);
+EventQueue mqtt_queue;
+
 Thread t;
 Thread t2(osPriorityNormal, 100 * 1024);
+
 Timer timer1;
 Timer timer2;
 
-EventQueue mqtt_queue;
 float ts=0.5;
-
 int times=0;
 int counttime=0;
 int flag=0;
-EventQueue queue2(32 * EVENTS_EVENT_SIZE);
 int timearr[20];
 
 void xbee_rx_interrupt(void);
